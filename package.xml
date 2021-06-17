@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ur10_tracking</name>
+  <version>0.0.0</version>
+  <description>A package for moving the UR10 arm to track a live position with the EE</description>
+
+  <maintainer email="mppavan@umd.edu">pavan</maintainer>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>interactive_markers</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>tf2</build_depend>
+  <build_depend>tf2_ros</build_depend>
+  <build_depend>moveit_msgs</build_depend>
+  <build_depend>moveit_ros_planning</build_depend>
+  <build_depend>moveit_ros_planning_interface</build_depend>
+  <build_depend>moveit_core</build_depend>
+  <build_depend>moveit_visual_tools</build_depend>
+  <build_export_depend>geometry_msgs</build_export_depend>
+  <build_export_depend>interactive_markers</build_export_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>rospy</build_export_depend>
+  <build_export_depend>std_msgs</build_export_depend>
+  <build_export_depend>tf2</build_export_depend>
+  <build_export_depend>tf2_ros</build_export_depend>
+  <build_export_depend>moveit_msgs</build_export_depend>
+  <build_export_depend>moveit_ros_planning</build_export_depend>
+  <build_export_depend>moveit_ros_planning_interface</build_export_depend>
+  <build_export_depend>moveit_core</build_export_depend>
+  <build_export_depend>moveit_visual_tools</build_export_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>interactive_markers</exec_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>tf2</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
+  <exec_depend>moveit_msgs</exec_depend>
+  <exec_depend>moveit_ros_planning</exec_depend>
+  <exec_depend>moveit_ros_planning_interface</exec_depend>
+  <exec_depend>moveit_core</exec_depend>
+  <exec_depend>moveit_visual_tools</exec_depend>
+
+  <export>
+
+  </export>
+</package>

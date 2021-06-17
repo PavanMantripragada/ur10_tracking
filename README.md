@@ -29,4 +29,6 @@ Add this package to the src folder of your catkin workspace and execute followin
   - Now add an interactive marker in Rviz and set it to /simple_marker
   - Move the marker and hold it in a position to move the arm.
 
-  <img align="center" src="https://github.com/DrKraig/ur10_tracking/blob/master/media/tracker.gif">
+<p align="center">
+  <img src="https://github.com/DrKraig/ur10_tracking/blob/master/media/tracker.gif">
+</p>

@@ -28,3 +28,5 @@ Add this package to the src folder of your catkin workspace and execute followin
   - `rosrun ur10_tracking ur10_im_tracker`
   - Now add an interactive marker in Rviz and set it to /simple_marker
   - Move the marker and hold it in a position to move the arm.
+
+  ![](https://github.com/DrKraig/ur10_tracking/blob/master/media/tracker.gif)

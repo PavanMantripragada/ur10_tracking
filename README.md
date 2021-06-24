@@ -21,9 +21,9 @@ Add this package to the src folder of your catkin workspace and execute followin
 - Start the UR10 simulation in Gazebo
   - `roslaunch ur_gazebo ur10.launch limited:=true`
 - Start movegroup for UR10 
-  - `roslaunch ur5_moveit_config ur5_moveit_planning_execution.launch sim:=true limited:=true`
+  - `roslaunch ur10_moveit_config ur10_moveit_planning_execution.launch sim:=true limited:=true`
 - Start rviz 
-  - `rosrun rviz rviz`
+  - `roslaunch ur10_moveit_config moveit_rviz.launch config:=true`
 - To start the interactive marker server node
   - `rosrun ur10_tracking ur10_im_tracker`
   - Now add an interactive marker in Rviz and set it to /simple_marker

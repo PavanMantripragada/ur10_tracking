@@ -1,5 +1,6 @@
 #include <ros/ros.h>
 #include <math.h>
+#include <numeric> 
 #include <string>
 #include <interactive_markers/interactive_marker_server.h>
 #include "./arm_controller/UR10_planning_options.hpp"
@@ -10,82 +11,47 @@
 
 namespace pose_buffer
 {
-  struct node
-{
-    geometry_msgs::Pose pose;
-    node *next = NULL;
-};
 
 class buffer
 {  
 public:
-    node *head, *tail;
     int size;
-    int length = 0;
     bool status = false;
-    double AVG_x = 200.0, AVG_y = 219.0, AVG_z = -2.3; 
+    double AVG_x = 200.0, AVG_y = 219.0, AVG_z = -2.3;
+    geometry_msgs::Pose latest_pose;
+    std::vector<double> x_pos, y_pos, z_pos; 
     buffer(int n)
     {
-        head = NULL;
-        tail = NULL;
-        size = n;
+      size = n;
     }
 
     void add_pose(geometry_msgs::Pose new_pose)
     {
-        node *temp = new node;
-        temp->pose = new_pose;
-        temp->next = NULL;
-
-        if(head == NULL)
-        {
-            head = temp;
-            tail = temp;
-            length++;
-        }
-        else
-        {
-            tail->next = temp;
-            tail = tail->next;
-            length++;
-            if(length > size)
-            {
-              node *tmp = head;
-              head = head->next;
-              delete tmp;
-              length--;
-            }
-        }
+      latest_pose = new_pose;
+      x_pos.insert(x_pos.begin(), new_pose.position.x);
+      y_pos.insert(y_pos.begin(), new_pose.position.y);
+      z_pos.insert(z_pos.begin(), new_pose.position.z);
+      if (x_pos.size() > size)
+      {
+        x_pos.pop_back();
+        y_pos.pop_back();
+        z_pos.pop_back();
+      }
     }
 
     void isStable()
     {
+      double dx, dy, dz;
       status = false;
-      node *temp = head;
-      geometry_msgs::Pose average_pose;
-      double avg_x, avg_y, avg_z, dx, dy, dz;
-      while(temp != NULL)
+      if (x_pos.size() == size)
       {
-        average_pose.position.x = average_pose.position.x + temp->pose.position.x;
-        average_pose.position.y = average_pose.position.y + temp->pose.position.y;
-        average_pose.position.z = average_pose.position.z + temp->pose.position.z;
-        temp = temp->next;
-      }
-      //ROS_INFO("ax : %f, ay : %f, az : %f", average_pose.position.x, average_pose.position.y, average_pose.position.z);
-      //ROS_INFO("length of buffer is : %d",length);
-      if(length > 10)
-      {
-        avg_x = average_pose.position.x/length;
-        avg_y = average_pose.position.y/length;
-        avg_z = average_pose.position.z/length;
-
-        dx = fabs(avg_x - AVG_x);
-        dy = fabs(avg_y - AVG_y);
-        dz = fabs(avg_z - AVG_z);
-        AVG_x = avg_x;
-        AVG_y = avg_y;
-        AVG_z = avg_z;
-        if(dx < 0.000001 && dy < 0.000001 && dz < 0.000001)
+        AVG_x = std::accumulate(x_pos.begin(), x_pos.end(), 0.0) / x_pos.size();
+        AVG_y = std::accumulate(y_pos.begin(), y_pos.end(), 0.0) / y_pos.size();
+        AVG_z = std::accumulate(z_pos.begin(), z_pos.end(), 0.0) / z_pos.size();
+        dx = fabs(AVG_x-x_pos[0]);
+        dy = fabs(AVG_y-y_pos[0]);
+        dz = fabs(AVG_z-z_pos[0]);
+        if (dx < 0.000001 && dy < 0.000001 && dz < 0.000001)
         {
           status = true;
         }
@@ -222,8 +188,8 @@ int main(int argc, char** argv)
    server.applyChanges();
    if (!prev_status && reference_position.status)
    {
-      ROS_INFO("Stable at :::::::::: x : %f, y : %f, z : %f", reference_position.tail->pose.position.x, reference_position.tail->pose.position.y, reference_position.tail->pose.position.z);
-      plan_status = planToPoseTarget(default_options,move_group,reference_position.tail->pose,ref_frame,output_plan,end_effector_name);
+      ROS_INFO("Stable at :::::::::: x : %f, y : %f, z : %f", reference_position.x_pos[0], reference_position.y_pos[0], reference_position.z_pos[0]);
+      plan_status = planToPoseTarget(default_options,move_group,reference_position.latest_pose,ref_frame,output_plan,end_effector_name);
       if (plan_status)
       {
       	move_group.execute(output_plan);
